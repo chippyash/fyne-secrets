@@ -9,6 +9,7 @@ APP_NAME=fyne-secrets
 APP_ID=biz.zf4.fyne-secrets
 GOROOT=${HOME}/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.23.4.linux-amd64
 
+
 .PHONY: help
 help:  ## Print the help documentation
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
@@ -45,8 +46,8 @@ web: ## Run app as a web app on http://localhost:8080
 tag: ## Tag the code for pushing to Github
 	vupdate -ppatch
 	git add .
-	git commit -m"tag code at $(cat VERSION)"
-	cat VERSION | xargs git tag
+	git commit -m"tag code at ${VERSION}"
+	${VERSION} | xargs git tag
 
 #.PHONY: release
 #release: ## Build a release version of the app for public distribution
