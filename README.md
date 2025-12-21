@@ -22,7 +22,14 @@ into the Fyne project at some point in the future.
 Import the package for use in your application:
 `import "github.com/chippyash/fyne-secrets/secrets"`
 
-For development, fork the repository, clone it, make your changes on a branch and do a pull request back to this repo.
+For development, 
+
+ - fork the repository
+ - clone it locally
+ - `go mod tidy`
+ - make your changes on a branch
+ - push your branch to your repo
+ - do a pull request back to this repo.
 
 `make help` to see available Make commands
 
