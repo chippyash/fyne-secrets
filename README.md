@@ -26,6 +26,11 @@ For development, fork the repository, clone it, make your changes on a branch an
 
 `make help` to see available Make commands
 
+The Linux code looks to see if the `gnome-keyring` daemon is running and that `secret-tool` is installed and uses it if it is.
+
+If you are running Linux and have `gnome-keyring` installed, you may need to run `sudo gnome-keyring-daemon --start` to start the daemon.
+In addition you may need to install, for Ubuntu/Debian `libsecret-tools` to get the `secret-tool` command.
+
 
 ## License
 BSD-3-Clause. See [LICENSE](./LICENSE)
