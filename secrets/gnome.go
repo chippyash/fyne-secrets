@@ -107,12 +107,12 @@ func (l *GnomeSecretStore) Delete(key string) error {
 
 // IsGnome checks if both GNOME Keyring and Secret Tool are installed and returns true if they are, otherwise returns an error.
 func IsGnome() (bool, error) {
-	_, err := PackageInstalled(gnomekeyringcmd)
-	if err != nil {
+	installed, err := PackageInstalled(gnomekeyringcmd)
+	if err != nil || !installed {
 		return false, ErrKeyringNotInstalled
 	}
-	_, err = PackageInstalled(gnomesecretcmd)
-	if err != nil {
+	installed, err = PackageInstalled(gnomesecretcmd)
+	if err != nil || !installed {
 		return false, ErrSecretManagerNotInstalled
 	}
 	return true, nil
