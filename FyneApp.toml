@@ -1,0 +1,10 @@
+Website = "https://github.com/chippyash/fyne-secrets"
+
+[Details]
+  Icon = "assets/secrets.png"
+  Name = "fyne-secrets"
+  ID = "biz.zf4.fyne-secrets"
+  Build = 1
+
+[Development]
+  Testmode = "true"
