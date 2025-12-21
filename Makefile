@@ -46,8 +46,8 @@ web: ## Run app as a web app on http://localhost:8080
 tag: ## Tag the code for pushing to Github
 	vupdate -ppatch
 	git add .
-	git commit -m"tag code at ${VERSION}"
-	${VERSION} | xargs git tag
+	git commit -m"tag code"
+	cat VERSION | xargs git tag
 
 #.PHONY: release
 #release: ## Build a release version of the app for public distribution
