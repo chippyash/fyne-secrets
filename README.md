@@ -39,6 +39,8 @@ The Linux code looks to see if the `gnome-keyring` daemon is running and that `s
 If you are running Linux and have `gnome-keyring` installed, you may need to run `sudo gnome-keyring-daemon --start` to start the daemon.
 In addition, you may need to install, for Ubuntu/Debian `libsecret-tools` to get the `secret-tool` command.
 
+If you are running Linux and `keyctl` installed, no additional steps are required.
+
 
 ## License
 BSD-3-Clause. See [LICENSE](./LICENSE)

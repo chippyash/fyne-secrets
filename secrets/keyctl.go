@@ -3,9 +3,11 @@
 package secrets
 
 import (
+	"bytes"
 	"fmt"
 	"io"
 	"os/exec"
+	"strings"
 
 	"github.com/pkg/errors"
 )
@@ -60,7 +62,7 @@ func (l *KeyctlSecretStore) Load(key string) ([]byte, error) {
 		"user",
 		key,
 	)
-	keyId, err := cmd.Output()
+	k, err := cmd.Output()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -69,12 +71,19 @@ func (l *KeyctlSecretStore) Load(key string) ([]byte, error) {
 		return []byte{}, ErrSecretNotFound
 	}
 
+	keyId := strings.TrimRight(string(k), "\n")
+	_ = keyId
+	if err != nil {
+		return []byte{}, err
+	}
 	cmd2 := exec.Command(
 		l.cmd,
 		"print",
-		string(keyId),
+		keyId,
 	)
-	return cmd2.Output()
+	out, err := cmd2.Output()
+	out = bytes.TrimRight(out, "\n")
+	return out, err
 }
 
 // Exists checks whether a secret associated with the specified key exists in the secret store and returns true if found.
@@ -88,6 +97,10 @@ func (l *KeyctlSecretStore) Exists(key string) (bool, error) {
 	)
 	_, err := cmd.Output()
 	if err != nil {
+		e := err.Error()
+		if "exit status 1" == e {
+			return false, nil
+		}
 		return false, err
 	}
 	// the keyctl utility will return 1 if the secret doesn't exist
@@ -112,8 +125,8 @@ func (l *KeyctlSecretStore) Delete(key string) error {
 
 // IsKeyCtl checks if the keyctl utility is installed and returns true if is, otherwise returns an error.
 func IsKeyCtl() (bool, error) {
-	_, err := PackageInstalled(keyctlcmd)
-	if err != nil {
+	installed, err := PackageInstalled(keyctlcmd)
+	if err != nil || !installed {
 		return false, ErrSecretManagerNotInstalled
 	}
 	return true, nil
