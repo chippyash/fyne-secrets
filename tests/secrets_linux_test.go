@@ -13,7 +13,6 @@ func TestLinux_NewSecretsStore(t *testing.T) {
 	sut, err := secrets.NewSecretStore("app-id", "app description")
 	assert.NoError(t, err)
 	assert.Implements(t, (*secrets.Secretive)(nil), sut)
-	assert.IsType(t, &secrets.GnomeSecretStore{}, sut)
 }
 
 func TestLinux_Functionality(t *testing.T) {

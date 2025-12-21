@@ -11,7 +11,8 @@ into the Fyne project at some point in the future.
 
 ## Caveats
 
- - Secure for Gnome based Linux platforms
+ - Secure for Linux platforms that use `gnome-keyring`
+ - Secure for Linux platforms that use `keyctl`
  - Work in progress for Android platforms
  - Not secure for Windows platforms - TBA
  - Not secure for MacOS platforms - TBA
@@ -36,7 +37,9 @@ For development,
 The Linux code looks to see if the `gnome-keyring` daemon is running and that `secret-tool` is installed and uses it if it is.
 
 If you are running Linux and have `gnome-keyring` installed, you may need to run `sudo gnome-keyring-daemon --start` to start the daemon.
-In addition you may need to install, for Ubuntu/Debian `libsecret-tools` to get the `secret-tool` command.
+In addition, you may need to install, for Ubuntu/Debian `libsecret-tools` to get the `secret-tool` command.
+
+If you are running Linux and `keyctl` installed, no additional steps are required.
 
 
 ## License
