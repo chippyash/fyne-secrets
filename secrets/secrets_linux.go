@@ -2,9 +2,6 @@
 
 package secrets
 
-// This will currently work for Gnome base distributions. See https://grahamwatts.co.uk/gnome-secrets/
-// @todo Make it work for other distributions
-
 // NewSecretStore returns a Secretive implementation based on system prerequisites or falls back to a default option.
 func NewSecretStore(appId, appDescription string) (Secretive, error) {
 	isGnome, gnomeErr := IsGnome()
@@ -14,7 +11,11 @@ func NewSecretStore(appId, appDescription string) (Secretive, error) {
 	// @todo Check for other Linux variants
 	isKeyctl, keyctlErr := IsKeyCtl()
 	if isKeyctl && keyctlErr == nil {
-		return NewKeyctlSecretStore(appId, appDescription), nil
+		s, err := NewKeyctlSecretStore()
+		if err == nil {
+			return s, nil
+		}
+		keyctlErr = err
 	}
 
 	// there was an error, so we provide the fallback and the error

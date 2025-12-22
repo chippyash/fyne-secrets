@@ -5,7 +5,6 @@ package secrets
 import (
 	"bytes"
 	"fmt"
-	"io"
 	"os/exec"
 	"strings"
 
@@ -17,20 +16,28 @@ const (
 )
 
 type KeyctlSecretStore struct {
-	cmd            string
-	appIdentifier  string //The application Id - i.e. the one used to identify the Fyne app
-	appDescription string //A description for the app. Used in the keychain
+	cmd               string
+	persistentKeyring string
 }
 
 // NewKeyctlSecretStore initializes and returns a Secretive implementation using the keyctl Secret Tool as the backend.
-func NewKeyctlSecretStore(appId, appDescription string) Secretive {
+func NewKeyctlSecretStore() (Secretive, error) {
 	//error can be ignored as it has already run successfully in the IsKeyCtl function
-	cmd, _ := exec.LookPath(keyctlcmd)
-	return &KeyctlSecretStore{
-		cmd:            cmd,
-		appIdentifier:  appId,
-		appDescription: appDescription,
+	tool, _ := exec.LookPath(keyctlcmd)
+	cmd := exec.Command(
+		tool,
+		"get_persistent",
+		"@u",
+	)
+	out, err := cmd.Output()
+	if err != nil {
+		return nil, err
 	}
+	pkr := bytes.TrimRight(out, "\n")
+	return &KeyctlSecretStore{
+		cmd:               tool,
+		persistentKeyring: string(pkr),
+	}, nil
 }
 
 // Store saves a secret value by associating it with a given key in the secret store using the `keyctl` command.
@@ -41,16 +48,13 @@ func (l *KeyctlSecretStore) Store(key string, value []byte) error {
 		"user",
 		key,
 		string(value),
-		"@u",
+		l.persistentKeyring,
 	)
-	cmdOutput, _ := cmd.StdoutPipe()
-	_ = cmd.Start()
-	cmdResult, err := io.ReadAll(cmdOutput)
+	out, err := cmd.Output()
 	if err != nil {
-		return errors.Wrap(err, fmt.Sprintf("Error reading command output: %s", string(cmdResult)))
+		return errors.Wrap(err, fmt.Sprintf("Error reading command output: %s", string(out)))
 	}
-	_ = cmd.Wait()
-	return err
+	return nil
 }
 
 // Load retrieves the secret associated with the specified key from the secret store using the `keyctl` command.
@@ -58,7 +62,7 @@ func (l *KeyctlSecretStore) Load(key string) ([]byte, error) {
 	cmd := exec.Command(
 		l.cmd,
 		"search",
-		"@u",
+		l.persistentKeyring,
 		"user",
 		key,
 	)
@@ -91,7 +95,7 @@ func (l *KeyctlSecretStore) Exists(key string) (bool, error) {
 	cmd := exec.Command(
 		l.cmd,
 		"search",
-		"@u",
+		l.persistentKeyring,
 		"user",
 		key,
 	)
