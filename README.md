@@ -47,11 +47,22 @@ For development,
 The Linux code looks to see if the `gnome-keyring` daemon is running and that `secret-tool` is installed and uses it if it is.
 
 If you are running Linux and have `gnome-keyring` installed, you may need to run `sudo gnome-keyring-daemon --start` to start the daemon.
-In addition, you may need to install, for Ubuntu/Debian `libsecret-tools` to get the `secret-tool` command.
 
-If you are running Linux and `keyctl` installed, no additional steps are required.
+If you are running Linux and `gnome-keyring` is not installed, i.e. you may be running the KDE desktop, then you will need to install it.
+There is plenty of information on the internet to help you with this for your platform. Note, For Kubuntu, gnome-keyring is preinstalled
 
-The preferred method is to use gnome-keyring. keyctl has a limitation in that the persistent keyring for a user has a timeout
+In addition, you need to install the `secret-tool` command if not already installed.
+
+ - Debian/Ubuntu: `sudo apt install libsecret-tools`
+ - Fedora: `sudo dnf install libsecret`
+ - Arch: `sudo pacman -S libsecret`
+ - Suse: `sudo zypper install libsecret`
+
+Verify installation: `secret-tool --help`
+
+If you are running Linux and `keyctl` is installed, no additional steps are required.
+
+The preferred method is to use _gnome-keyring_. keyctl has a limitation in that the persistent keyring for a user has a timeout
 and if the user logs out the keyring is lost after that period. You can use 
 `cat /proc/sys/kernel/keys/persistent_keyring_expiry` to see the timeout period in seconds, usually 72 hours.
 
