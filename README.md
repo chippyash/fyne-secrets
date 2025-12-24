@@ -106,15 +106,12 @@ BSD-3-Clause. See [LICENSE](./LICENSE)
 ## Roadmap
 
  - Add support for Android
- - Add support for MacOS
  - Add support for iOS
- - Add support for Windows
  - Add support for other Linux flavours
 
 ## References
 
  - [Github](https://github.com/chippyash/fyne-secrets)
  - [Linux Gnome Secrets](https://grahamwatts.co.uk/gnome-secrets/)
- - [Why we need a better Windoze solution](https://grahamwatts.co.uk/windows-secrets/)
  - [vupdate - Semantic Version Updater](https://github.com/chippyash/semantic-version-updater/tree/master)
  - [keyutils](https://man7.org/linux/man-pages/man7/keyutils.7.html)
