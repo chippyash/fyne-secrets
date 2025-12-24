@@ -27,10 +27,33 @@ is included in this library. You can use it as a starting point for your own imp
 import "github.com/chippyash/fyne-secrets/crypt"
 ```
 
+See `crypt/crypt.go` for interface details.
+
 ## How
 
-Import the package for use in your application:
-`import "github.com/chippyash/fyne-secrets/secrets"`
+```go
+import "github.com/chippyash/fyne-secrets/secrets"
+
+func Test_Functionality(t *testing.T) {
+    sut, err := secrets.NewSecretStore("app-id", "app description")
+    assert.NoError(t, err)
+    err = sut.Store("test", []byte("test"))
+    assert.NoError(t, err)
+    b, err := sut.Exists("test")
+    assert.NoError(t, err)
+    assert.True(t, b)
+    v, err := sut.Load("test")
+    assert.NoError(t, err)
+    assert.Equal(t, "test", string(v))
+    err = sut.Delete("test")
+    assert.NoError(t, err)
+    b, err = sut.Exists("test")
+    assert.NoError(t, err)
+    assert.False(t, b)
+}
+```
+
+See `secrets/secretive.go` for interface details.
 
 For development, 
 
@@ -44,14 +67,14 @@ For development,
 `make help` to see available Make commands
 
 ### Linux platforms
-The Linux code looks to see if the `gnome-keyring` daemon is running and that `secret-tool` is installed and uses it if it is.
+The Linux code looks to see if the `gnome-keyring` daemon is running. If so, it will be used.
 
-If you are running Linux and have `gnome-keyring` installed, you may need to run `sudo gnome-keyring-daemon --start` to start the daemon.
+If you have `gnome-keyring` installed, you may need to run `sudo gnome-keyring-daemon --start` to start the daemon.
 
-If you are running Linux and `gnome-keyring` is not installed, i.e. you may be running the KDE desktop, then you will need to install it.
+If `gnome-keyring` is not installed, i.e. you may be running the KDE desktop, then you will need to install it.
 There is plenty of information on the internet to help you with this for your platform. Note, For Kubuntu, gnome-keyring is preinstalled
 
-In addition, you need to install the `secret-tool` command if not already installed.
+You may want to install the [secret-tool](https://man.archlinux.org/man/core/libsecret/secret-tool.1.en) cli command tool if not already installed.
 
  - Debian/Ubuntu: `sudo apt install libsecret-tools`
  - Fedora: `sudo dnf install libsecret`
@@ -60,9 +83,18 @@ In addition, you need to install the `secret-tool` command if not already instal
 
 Verify installation: `secret-tool --help`
 
-If you are running Linux and `keyctl` is installed, no additional steps are required.
+You may want to install the [Seahorse GUI](https://wiki.gnome.org/Apps/Seahorse) tool if not already installed.
 
-The preferred method is to use _gnome-keyring_. keyctl has a limitation in that the persistent keyring for a user has a timeout
+ - Debian/Ubuntu: `sudo apt install seahorse`
+ - Fedora: `sudo dnf install seahorse`
+ - Arch: `sudo pacman -S seahorse`
+ - Suse: `sudo zypper install seahorse`
+
+If you don't have `gnome-keyring` but `keyctl` is installed, it will be used instead.
+
+If neither `gnome-keyring` nor `keyctl` is installed, the library will fall back to using device file storage.
+
+The preferred method is to use `gnome-keyring`. `keyctl` has a limitation in that the persistent keyring for a user has a timeout
 and if the user logs out the keyring is lost after that period. You can use 
 `cat /proc/sys/kernel/keys/persistent_keyring_expiry` to see the timeout period in seconds, usually 72 hours.
 
