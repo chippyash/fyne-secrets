@@ -1,4 +1,4 @@
-# Fyne Secrets
+# <img src="assets/secret.png" widt=30 height=30> Fyne Secrets
 ## git@github.com:chippyash/fyne-secrets.git
 
 ## What
