@@ -13,10 +13,10 @@ into the Fyne project at some point in the future.
 
  - Secure for Linux platforms that use `gnome-keyring`
  - Secure for Linux platforms that use `keyctl`
- - Work in progress for Android platforms
- - Not secure for Windows platforms - TBA
- - Not secure for MacOS platforms - TBA
- - Not secure for iOS platforms - TBA
+ - Work in progress for Android platform
+ - Secure for Windows platform
+ - Secure for MacOS (Darwin) platform
+ - Not secure for iOS platform - TBA
 
 This secrets library **does not** provide encryption of the data.  That is left to the application using the library. Some real
 world experience has shown that different platforms can treat the value being stored differently.  For safety you should
