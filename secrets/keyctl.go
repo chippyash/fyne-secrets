@@ -127,6 +127,14 @@ func (l *KeyctlSecretStore) Delete(key string) error {
 	return err
 }
 
+func (l *KeyctlSecretStore) Open() error {
+	return nil
+}
+
+func (l *KeyctlSecretStore) Close() error {
+	return nil
+}
+
 // IsKeyCtl checks if the keyctl utility is installed and returns true if is, otherwise returns an error.
 func IsKeyCtl() (bool, error) {
 	installed, err := PackageInstalled(keyctlcmd)
